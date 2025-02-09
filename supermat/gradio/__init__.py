@@ -190,7 +190,9 @@ class LLMChat:
             # history_langchain_format = self.convert_history_to_messages(history)
             # history_langchain_format.append(HumanMessage(content=message))
             gpt_response = self.chain.invoke(message)
-            return gpt_response if isinstance(gpt_response, str) else gpt_response.content
+            gpt_response = gpt_response if isinstance(gpt_response, str) else gpt_response.content
+            gpt_response = re.sub(r"<cite\b[^>]*?/>", r"``\g<0>``", gpt_response)
+            return gpt_response
 
         except Exception as e:
             raise gr.Error(f"Error: {str(e)}\n{traceback.format_exc()}")
