@@ -237,7 +237,9 @@ def create_llm_interface():
                                 placeholder="e.g., http://localhost:11434 for Ollama",
                             )
                             model = gr.Textbox(
-                                value="deepseek-r1:8b", label="Model Name", placeholder="Model setup in Ollama"
+                                value="deepseek-r1:8b",
+                                label="Model Name",
+                                placeholder="Required. Model setup in Ollama",
                             )
                             llm_init_inputs = [provider_option, model, base_url]
                             initialize_client = lambda p, m, b: llm_chat.initialize_client(  # noqa: E731
@@ -247,14 +249,17 @@ def create_llm_interface():
                             )
                         else:
                             credentials = gr.Textbox(
-                                label="API Key/Credentials", type="password", placeholder="Enter your API key here"
+                                label="API Key/Credentials",
+                                type="password",
+                                placeholder="Required. Enter your API key here",
                             )
                             model = gr.Textbox(
-                                label=f"{provider} model",
+                                label=f"{provider} model", placeholder="Required. Name of the model to run."
                             )
                             base_url = gr.Textbox(
                                 value=BASE_URLS.get(provider),
                                 label="Azure Endpoint" if provider == LLMProvider.azure_openai else "API Host",
+                                placeholder="Optional. Only provide if required.",
                             )
                             llm_init_inputs = [provider_option, model, credentials, base_url]
                             initialize_client = lambda p, m, c, b: llm_chat.initialize_client(  # noqa: E731
@@ -280,8 +285,17 @@ def create_llm_interface():
                 if not (PDF_SERVICES_CLIENT_ID and PDF_SERVICES_CLIENT_SECRET):
                     with gr.Row():
                         with gr.Column():
-                            adobe_client_id = gr.Textbox(label="PDF_SERVICES_CLIENT_ID", type="password")
-                            adobe_client_secret = gr.Textbox(label="PDF_SERVICES_CLIENT_SECRET", type="password")
+                            gr.Markdown(
+                                "Follow [this](https://developer.adobe.com/document-services/docs/overview/pdf-services-api/gettingstarted/)."
+                            )
+                            adobe_client_id = gr.Textbox(
+                                label="PDF_SERVICES_CLIENT_ID", type="password", placeholder="Required. Adobe Client ID"
+                            )
+                            adobe_client_secret = gr.Textbox(
+                                label="PDF_SERVICES_CLIENT_SECRET",
+                                type="password",
+                                placeholder="Required. Adobe Client Secret",
+                            )
                             adobe_btn = gr.Button("Initialize Adobe")
 
                     def setup_env(adobe_client_id: str, adobe_client_secret: str):
@@ -301,7 +315,9 @@ def create_llm_interface():
                     )
                 with gr.Column():
                     collection_id = gr.State(random.randint(1, 100))
-                    collection_name = gr.Textbox(f"TEST{collection_id.value}", label="Collection Name")
+                    collection_name = gr.Textbox(
+                        f"TEST{collection_id.value}", label="Collection Name", placeholder="Required."
+                    )
                     upload_btn = gr.Button("Parse PDF files.", variant="primary")
                 with gr.Column():
                     upload_status = gr.Textbox(label="Upload Status")
