@@ -10,7 +10,7 @@
 2. Setup [python-poetry](https://python-poetry.org/docs/#installation) in your system.
 3. Run `poetry install --with=frontend --all-extras` in your virtual environment to install all required dependencies.
 4. In terminal run `python -m supermat.gradio` to the run the gradio interface to see it in action.
-5. You can also take a look at our demo notebook [`notebooks/pdf_demo.ipynb`](notebooks/pdf_demo.ipynb)
+5. You can also take a look at our demo notebook `notebooks/pdf_demo.ipynb`
 
 ### HuggingFace spaces
 
