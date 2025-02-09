@@ -31,7 +31,7 @@ jobs:
       - name: Update requirements.txt
         run: |
           cd hf_space
-          echo 'supermat[gradio,adobe,pymupdf] @ git+${{ github.repositoryUrl }}@${{ github.sha }}#egg=supermat[gradio,adobe,pymupdf]' > requirements.txt
+          echo 'supermat[gradio,adobe,pymupdf] @ git+${{ github.server_url }}/${{ github.repository }}@${{ github.sha }}#egg=supermat[gradio,adobe,pymupdf]' > requirements.txt
 
       - name: Commit and Push Changes
         run: |
