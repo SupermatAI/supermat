@@ -26,7 +26,6 @@ from supermat.core.parser import FileProcessor
 from supermat.langchain.bindings import SupermatRetriever
 
 
-
 def get_docs(pdf_files: list[Path]) -> ParsedDocumentType:
     parsed_files = Parallel(n_jobs=-1)(delayed(FileProcessor.parse_file)(path) for path in pdf_files)
     if TYPE_CHECKING:
@@ -43,7 +42,7 @@ def get_docs(pdf_files: list[Path]) -> ParsedDocumentType:
     return documents
 
 
-def get_retriever(documents: ParsedDocumentType,collection_name:str) -> SupermatRetriever:
+def get_retriever(documents: ParsedDocumentType, collection_name: str) -> SupermatRetriever:
     retriever = SupermatRetriever(
         parsed_docs=documents,
         vector_store=Chroma(
