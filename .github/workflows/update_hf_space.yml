@@ -23,7 +23,7 @@ jobs:
 
       - name: Clone Hugging Face Space Repo
         run: |
-          git clone https://huggingface.co/spaces/huggingface.co/spaces/${{ secrets.HUGGING_FACE_USER }}/${{ env.HF_SPACE_NAME }} hf_space
+          git clone https://huggingface.co/spaces/${{ secrets.HUGGING_FACE_USER }}/${{ env.HF_SPACE_NAME }} hf_space
           cd hf_space
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
