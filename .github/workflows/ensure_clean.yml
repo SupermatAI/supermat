@@ -1,0 +1,55 @@
+name: Ensure files are formatted.
+
+on: [workflow_dispatch, push]
+
+jobs:
+  ensure_formatted:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Poetry
+        uses: Gr1N/setup-poetry@v9
+        with:
+          poetry-version: ${{ env.POETRY_VERSION }}
+
+      - name: Install Python
+        id: install-python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: "poetry"
+
+      - uses: actions/cache@v4
+        with:
+          key: style-${{ hashFiles('**/poetry.lock') }}
+          path: ./.venv
+          restore-keys: |
+            style-
+
+      - name: Install Python Dependencies
+        run: |
+          poetry install --sync
+
+      - name: Normalize all files
+        run: |
+          source .venv/bin/activate
+          git add --renormalize .
+
+      - name: Format all python files
+        run: |
+          source .venv/bin/activate
+          black `git ls-files '*.py'`
+          isort `git ls-files '*.py'`
+
+      - name: Make sure poetry.lock is in sync
+        run: |
+          poetry lock --check
+
+      - name: Check that no files were changed
+        run: |
+          source .venv/bin/activate
+          git --no-pager diff
+          git status --porcelain
+          [ -z "$(git status --porcelain)" ]
