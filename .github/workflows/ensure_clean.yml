@@ -18,7 +18,7 @@ jobs:
         id: install-python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
+          python-version-file: .python-version
           cache: "poetry"
 
       - uses: actions/cache@v4
