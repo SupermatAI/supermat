@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - ci/hugging_face_sync  # for testing only
   workflow_dispatch:
 
 env:
