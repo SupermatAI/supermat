@@ -45,7 +45,7 @@ jobs:
 
       - name: Make sure poetry.lock is in sync
         run: |
-          poetry lock --check
+          poetry check --lock
 
       - name: Check that no files were changed
         run: |
