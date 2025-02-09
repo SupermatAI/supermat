@@ -1,0 +1,44 @@
+name: Update Hugging Face Space
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+    HF_SPACE_NAME: supermat-demo
+
+jobs:
+  update-requirements:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout this repository
+        uses: actions/checkout@v4
+
+      - name: Get latest commit hash
+        id: get_commit
+        run: echo "COMMIT_HASH=$(git rev-parse HEAD)" >> $GITHUB_ENV
+
+      - name: Clone Hugging Face Space Repo
+        run: |
+          git clone https://huggingface.co/spaces/huggingface.co/spaces/${{ secrets.HUGGING_FACE_USER }}/${{ env.HF_SPACE_NAME }} hf_space
+          cd hf_space
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+      - name: Update requirements.txt
+        run: |
+          cd hf_space
+          echo 'supermat[gradio,adobe,pymupdf] @ git+${{ github.repositoryUrl }}@${{ github.sha }}#egg=supermat[gradio,adobe,pymupdf]' > requirements.txt
+
+      - name: Commit and Push Changes
+        run: |
+          cd hf_space
+          if git diff --quiet; then
+            echo "No changes to commit."
+          else
+            git add requirements.txt
+            git commit -m "Update requirements.txt to latest commit ${{ github.sha }}"
+            git push https://${{ secrets.HUGGING_FACE_USER }}:${{ secrets.HUGGING_FACE_API_KEY }}@huggingface.co/spaces/${{ secrets.HUGGING_FACE_USER }}/${{ env.HF_SPACE_NAME }} HEAD:main
+          fi
